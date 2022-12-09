@@ -1,0 +1,70 @@
+# OPT -b,-f,-r,-v
+    OPT:
+        b.      [property b]
+        f.      [property f]
+        r.      [property r]
+        v.      [property v]
+        empty. [property OPTEmpty]
+#SOURCE
+Source:
+      None.							[error] [property SourceFileError]
+      One.							
+      Many.	[property MutipleFile]
+
+Sources: 
+reasonable	[if MutipleFile]
+too many files [single]
+#Directory					
+Directory:
+        Valid.		[property VaildDirectory]
+        Invalid. 	[property DirectoryDoesntExist]
+	Empty		[property DirectoryEmpty]
+
+#OpenFile
+Openfile:
+	Opened.	[property FileOpened]
+	Failed to Open File. 
+	
+
+# OPT OPTION
+
+    force:
+        All file opened. [if f]
+        at least one file can not be opened, removing and try again.[if f] [property forcefile]
+	force error. [if f][error]
+
+    backup:
+        backup file(s) success.[if b] [property executeb]
+	failed. [if b] [error]
+	backup file(s) partially done, check files [if b][property partiallyOpened]
+
+    recursive:
+        no directories. [if r && DirectoryDoesntExist]
+	invaild directories	[if r &&if DirectoryEmpty]
+        copy directories recursively.[if r] [property specifiedr]
+	copy error. [if r] [error]
+#remove file
+	DeleteFile:
+	Remove Source File.	[if !FileOpened && f][property executef]
+	cant remove file.	[error]
+
+    verbose:
+        nothing done. [if v][error]
+        explain what is being done.[if v] [property specifiedverbose]
+	verbose error.[if v] [error]
+
+  	directory opened.  [if v && VaildDirectory]
+	File Opened. [if v && FileOpened]
+   	Source opened.       [if v && SourceFileError]
+	Opt b used		[if v && executeb]
+	Opt f used		[if v && executef]
+	Opt v used		[if v && executev]
+	Opt r used		[if v && executer]
+	Deleted file.		[if v && !FileOpened && f]
+	
+	
+
+
+
+
+
